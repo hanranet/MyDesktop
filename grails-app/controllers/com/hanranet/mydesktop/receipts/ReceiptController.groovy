@@ -1,29 +1,75 @@
 package com.hanranet.mydesktop.receipts
 
+import com.hanranet.mydesktop.budget.Item
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-class ReceiptController {
+class ReceiptController
+{
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "GET"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Receipt.list(params), model:[receiptCount: Receipt.count()]
+    def balanceService
+
+    def beforeInterceptor = [action:this.&auth]
+
+    def auth()
+    {
+        println "This is a test of auth"
+//        if (!session.user)
+//        {
+//            redirect(controller:"user", action:"login")
+//            return false
+//        }
+    }
+
+    def index()
+    {
+        def balance = balanceService.getLastStatementEndingBalace()
+
+        def receiptList = Receipt.findAllByOwnerAndReconcileNoIsNull("thanrahan", [sort: ['date': 'asc', 'debit': 'desc']])
+
+        receiptList.each { receipt->
+
+            if (receipt.debit > 0)
+            {
+                balance = balance + receipt.debit
+                receipt.balance = balance
+                receipt.reconcileAmount = receipt.debit
+            }
+
+            if (receipt.credit > 0)
+            {
+                balance = balance - receipt.credit
+                receipt.balance = balance
+                receipt.reconcileAmount = receipt.credit * -1
+            }
+        }
+
+        [receiptList: receiptList]
+
     }
 
     def show(Receipt receipt) {
-        respond receipt
+        redirect action:"index"
     }
 
     def create() {
-        respond new Receipt(params)
+
+        def categoryList = Item.list()
+        categoryList.add(new Item(name: "Salary"))
+
+        [receipt: new Receipt(params), categoryList: categoryList]
+
     }
 
     @Transactional
-    def save(Receipt receipt) {
-        if (receipt == null) {
+    def save(Receipt receipt)
+    {
+        if (receipt == null)
+        {
             transactionStatus.setRollbackOnly()
             notFound()
             return
@@ -47,11 +93,16 @@ class ReceiptController {
     }
 
     def edit(Receipt receipt) {
-        respond receipt
+
+        def categoryList = Item.list()
+        categoryList.add(new Item(name: "Salary"))
+
+        [receipt: Receipt.get(params.id), categoryList: categoryList]
     }
 
     @Transactional
     def update(Receipt receipt) {
+
         if (receipt == null) {
             transactionStatus.setRollbackOnly()
             notFound()
@@ -86,13 +137,9 @@ class ReceiptController {
 
         receipt.delete flush:true
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'receipt.label', default: 'Receipt'), receipt.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
+        flash.message = message(code: 'default.deleted.message', args: [message(code: 'receipt.label', default: 'Receipt'), receipt.id])
+        redirect action:"index"
+
     }
 
     protected void notFound() {

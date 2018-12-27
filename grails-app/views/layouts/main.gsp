@@ -7,9 +7,15 @@
         <g:layoutTitle default="Grails"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
     <asset:stylesheet src="application.css"/>
-
+    <asset:javascript src="jquery-ui.js"/>
+    <asset:javascript src="jquery-1.12.4.js"/>
+    <asset:stylesheet src="jquery-ui.css"/>
+    <script>
+      $( function() {
+        $( "#datepicker" ).datepicker();
+      } );
+    </script>
     <g:layoutHead/>
 </head>
 <body>

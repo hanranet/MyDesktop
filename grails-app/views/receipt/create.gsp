@@ -25,14 +25,49 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form resource="${this.receipt}" method="POST">
-                <fieldset class="form">
-                    <f:all bean="receipt"/>
-                </fieldset>
-                <fieldset class="buttons">
-                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-                </fieldset>
-            </g:form>
+                       <form action="/receipt/save" method="post" >
+                           <fieldset class="form">
+                               <div class='fieldcontain'>
+                                   <label for='checkNo'>Check No</label><input type="number" name="checkNo" value="" id="checkNo" />
+                               </div>
+                               <div class='fieldcontain required'>
+                                   <label for='date'>Date
+                                       <span class='required-indicator'>*</span>
+                                   </label>
+                                   <input type="text" name="date" value="${receipt.date}" size="10"  autocomplete="off" id="datepicker"></p>
+                               </div>
+                               <div class='fieldcontain required'>
+                                   <label for='payee'>Payee
+                                       <span class='required-indicator'>*</span>
+                                   </label>
+                                   <input type="text" name="payee" value="" required="" id="payee" />
+                               </div>
+                               <div class='fieldcontain'>
+                                   <label for='category'>Category</label>
+                                   <g:select optionKey="name" optionValue="name" name="category" from="${categoryList}" noSelection="['':'-Select a category-']"/>
+                               </div>
+                               <div class='fieldcontain'>
+                                   <label for='debit'>Debit</label>
+                                   <input type="number decimal" name="debit" value="" id="debit" />
+                               </div>
+                               <div class='fieldcontain'>
+                                   <label for='credit'>Credit</label>
+                                   <input type="number decimal" name="credit" value="" id="credit" />
+                               </div>
+                               <div class='fieldcontain'>
+                                   <label for='memo'>Memo</label>
+                                   <input type="text" name="memo" value="" id="memo" />
+                               </div>
+                               <!--todo remove these hard coded items -->
+                               <input type="hidden" name="owner" value="thanrahan" />
+                               <input type="hidden" name="createUser" value="thanrahan" />
+                               <input type="hidden" name="updateUser" value="thanrahan" />
+                           </fieldset>
+                           <fieldset class="buttons">
+                               <input type="submit" name="create" class="save" value="Create" id="create" />
+                           </fieldset>
+                       </form>
+
         </div>
     </body>
 </html>
