@@ -81,6 +81,14 @@ class ReceiptController
             return
         }
 
+        if (receipt.debit == null) {
+            receipt.debit = 0
+        }
+
+        if (receipt.credit == null) {
+            receipt.credit = 0
+        }
+
         receipt.save flush:true
 
         request.withFormat {
@@ -89,6 +97,41 @@ class ReceiptController
                 redirect receipt
             }
             '*' { respond receipt, [status: CREATED] }
+        }
+    }
+
+    @Transactional
+    def autoReconcileSave(Receipt receipt)
+    {
+        if (receipt == null)
+        {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (receipt.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond receipt.errors, view:'create'
+            return
+        }
+
+        if (receipt.debit == null) {
+            receipt.debit = 0
+        }
+
+        if (receipt.credit == null) {
+            receipt.credit = 0
+        }
+
+        receipt.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'receipt.label', default: 'Receipt'), receipt.id])
+                redirect(controller: "statement", action: "autoReconcile")
+            }
+            '*' { redirect(controller: "statement", action: "autoReconcile") }
         }
     }
 
@@ -113,6 +156,14 @@ class ReceiptController
             transactionStatus.setRollbackOnly()
             respond receipt.errors, view:'edit'
             return
+        }
+
+        if (receipt.debit == null) {
+            receipt.debit = 0
+        }
+
+        if (receipt.credit == null) {
+            receipt.credit = 0
         }
 
         receipt.save flush:true
