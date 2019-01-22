@@ -32,12 +32,19 @@
                 <a class="navbar-brand" href="/#">
                     <i class="fa grails-icon">
                         <asset:image src="grails-cupsonly-logo-white.svg"/>
-                    </i> Grails
+                    </i> MyDesktop
                 </a>
             </div>
             <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
                 <ul class="nav navbar-nav navbar-right">
-                    <g:pageProperty name="page.nav" />
+                    <li><g:link controller="Receipt" action="index">Receipts</g:link></li>
+                    <li><g:link controller="Item" action="index">Budget</g:link></li>
+                    <li><g:link controller="Statement" action="autoReconcile">AutoReconcile</g:link></li>
+                    <li><g:link controller="Statement" action="index">Statements</g:link></li>
+                    <!--<li><g:link controller="Debt" action="list">Debt Repay</g:link></li>-->
+                    <!--<li><g:link controller="DripAccount" action="list">DRIP's</g:link></li>-->
+                    <!--<li><g:link controller="DripAccount" action="list">Spending Report</g:link></li> -->
+                    <!--<li><g:link controller="DripAccount" action="list">Pay Dates</g:link></li> -->
                 </ul>
             </div>
         </div>
