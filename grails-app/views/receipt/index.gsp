@@ -13,7 +13,8 @@
             </ul>
         </div>
         <div id="list-receipt" class="content scaffold-list" role="main">
-            <h1><g:message code="default.list.label" args="[entityName]" /></h1>
+            <h1>Quick Add</h1>
+            <g:render template="quickForm"/>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>

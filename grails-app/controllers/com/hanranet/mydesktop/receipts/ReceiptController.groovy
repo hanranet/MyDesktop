@@ -50,7 +50,10 @@ class ReceiptController
 
         receiptList = receiptList.reverse()
 
-        [receiptList: receiptList]
+        def categoryList = Item.list()
+        categoryList.add(new Item(name: "Salary"))
+
+        [receiptList: receiptList, categoryList: categoryList]
 
     }
 
