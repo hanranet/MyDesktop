@@ -42,6 +42,10 @@
             }
 
         </script>
+
+        <style>
+            td {text-align: left;}
+         </style>
     </head>
     <body>
         <a href="#list-item" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -49,7 +53,8 @@
             <ul>
                 <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
                 <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-                <li><a href="#" onclick="javascript:payDay();">Pay Day</a></li>
+                <li><a href="#" class="payday" onclick="javascript:payDay();">Pay Day</a></li>
+                <li><a href="#" class="report">Spending Report</a></li>
             </ul>
         </div>
         <div id="list-item" class="content scaffold-list" role="main">
@@ -61,12 +66,13 @@
         <table>
             <thead>
                 <tr>
-                    <th>Category Name</th>
-                    <th>Weekly</th>
-                    <th>Monthly</th>
-                    <th>Bucket</th>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th class='currency'>Weekly</th>
+                    <th class='currency'>Monthly</th>
+                    <th class='currency'>Bucket</th>
                     <th>Bill Date</th>
-                    <th>Bill Amount</th>
+                    <th class='currency'>Bill Amount</th>
                     <th>Memo</th>
                     <th>Action</th>
                 </tr>
@@ -76,28 +82,37 @@
                 <g:each in="${itemList}" var="item" >
                     <g:set var="style" value="${counter % 2 == 0 ? 'even' : 'odd'}" />
                     <tr class='${style}'>
+                        <g:if test="${item.category == 'A'}">
+                            <td>Annual Expense</td>
+                        </g:if>
+                        <g:if test="${item.category == 'U'}">
+                            <td>Utilities</td>
+                        </g:if>
+                        <g:if test="${item.category == 'L'}">
+                            <td>Liability</td>
+                        </g:if>
                         <td>${item.name}</td>
 
                         <g:if test="${item.weeklyBucketAmount > 0}">
-                            <td><g:formatNumber number="${item.weeklyBucketAmount}" type="currency" currencyCode="USD" /></td>
+                            <td class='currency'><g:formatNumber number="${item.weeklyBucketAmount}" type="currency" currencyCode="USD" /></td>
                         </g:if>
                         <g:else>
                             <td>&nbsp;</td>
                         </g:else>
 
                         <g:if test="${item.monthlyBucketAmount > 0}">
-                            <td><g:formatNumber number="${item.monthlyBucketAmount}" type="currency" currencyCode="USD" /></td>
+                            <td class='currency'><g:formatNumber number="${item.monthlyBucketAmount}" type="currency" currencyCode="USD" /></td>
                         </g:if>
                         <g:else>
                             <td>&nbsp;</td>
                         </g:else>
 
-                        <td><g:formatNumber number="${item.bucketAmount}" type="currency" currencyCode="USD" /></td>
+                        <td class='currency'><g:formatNumber number="${item.bucketAmount}" type="currency" currencyCode="USD" /></td>
 
                         <td><g:formatDate format="MM/dd/yyyy" date="${item.billDate}"/></td>
 
                         <g:if test="${item.billAmount > 0}">
-                            <td><g:formatNumber number="${item.billAmount}" type="currency" currencyCode="USD" /></td>
+                            <td class='currency'><g:formatNumber number="${item.billAmount}" type="currency" currencyCode="USD" /></td>
                         </g:if>
                         <g:else>
                             <td>&nbsp;</td>
@@ -113,6 +128,37 @@
                     </tr>
                     <g:set var="counter" value="${counter + 1}" />
                 </g:each>
+
+                <tr class='${style}'>
+                	<td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                	<td class='currency'><b><g:formatNumber number="${weeklyTotal}" type="currency" currencyCode="USD" /></b></td>
+                	<td class='currency'><b><g:formatNumber number="${monthlyTotal}" type="currency" currencyCode="USD" /></b></td>
+                	<td class='currency'><b><g:formatNumber number="${bucketTotal}" type="currency" currencyCode="USD" /></b></td>
+                	<td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                </tr>
+                <g:set var="counter" value="${counter + 1}" />
+                <tr class='${style}'>
+                 	<td>&nbsp;</td>
+                 	<td><b>Receipt Balance</b></td>
+                    <td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                	<td class='currency'><b><g:formatNumber number="${receiptBalance}" type="currency" currencyCode="USD" /></b></td>
+                	<td colspan="2">&nbsp;</td>
+                </tr>
+                <g:set var="counter" value="${counter + 1}" />
+                <tr class='${style}'>
+                  	<td>&nbsp;</td>
+                  	<td><b>Difference</b></td>
+                  	<td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                	<td class='currency'><b><g:formatNumber number="${difference}" type="currency" currencyCode="USD" /></b></td>
+                	<td>&nbsp;</td>
+                	<td>&nbsp;</td>
+                </tr>
 
             </tbody>
 

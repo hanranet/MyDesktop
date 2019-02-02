@@ -9,6 +9,7 @@ class Item {
     BigDecimal weeklyBucketAmount
     BigDecimal monthlyBucketAmount
     BigDecimal bucketAmount
+    String category
     String memo
     @BindingFormat('MM/dd/yyyy')
     Date billDate
@@ -24,6 +25,7 @@ class Item {
     static constraints = {
         owner(blank:false, nullable:false)
         name(blank:false, nullable:false)
+        category(inList: ["U", "A", "L"])
         monthlyBucketAmount(blank:true, nullable:true)
         bucketAmount(blank:true, nullable:true)
         memo(blank:true, nullable:true)

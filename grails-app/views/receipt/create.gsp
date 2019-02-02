@@ -59,9 +59,9 @@
                                    <input type="text" name="memo" value="" id="memo" />
                                </div>
                                <!--todo remove these hard coded items -->
-                               <input type="hidden" name="owner" value="thanrahan" />
-                               <input type="hidden" name="createUser" value="thanrahan" />
-                               <input type="hidden" name="updateUser" value="thanrahan" />
+                               <input type="hidden" name="owner" value="" />
+                               <input type="hidden" name="createUser" value="" />
+                               <input type="hidden" name="updateUser" value="" />
                            </fieldset>
                            <fieldset class="buttons">
                                <input type="submit" name="create" class="save" value="Create" id="create" />

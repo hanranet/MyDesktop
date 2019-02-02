@@ -22,9 +22,8 @@
         </style>
         <script>
             $( document ).ready(function() {
-                $("#myLink").click(function(e) {
+                $("a.myLink").click(function(){
                     var me = $(this), data = me.data('key');
-
                     var payee = data.payee;
                     $('#modalPayee').val(payee);
                     var debit = data.debit;
@@ -112,9 +111,9 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			
+
 			<g:uploadForm action="autoReconcile" method="post" enctype="multipart/form-data">
-			
+
 			<table>
 				<!-- SNIP -->
 				<tr>
@@ -149,14 +148,14 @@
 					<tbody>
 
 						<g:if test="${csvReceiptList}">
-							<g:each in="${csvReceiptList}" var="c">
+							<g:each status="i" in="${csvReceiptList}" var="c">
 								<tr>
 									<td><g:formatDate format="MM/dd/yyyy" date="${c.date}" /></td>
 									<td><g:if test="${c.checkNo > 0}">${c.checkNo}</g:if><g:else>&nbsp;</g:else></td>
 									<td>${c.payee}</td>
 									<td><g:formatNumber number="${c.debit}" type="currency" currencyCode="USD" /></td>
 									<td><g:formatNumber number="${c.credit}" type="currency" currencyCode="USD" /></td>
-									<td><a id='myLink' href='#' data-key='{"payee":"${c.payee}", "debit":"${c.debit}", "credit":"${c.credit}", "date":"${c.date}"}' >Add</a></td>
+									<td><a class='myLink' href='#' id="id${i}" data-key='{"payee":"${c.payee}", "debit":"${c.debit}", "credit":"${c.credit}", "date":"${c.date}"}' >Add</a></td>
 								</tr>
 							</g:each>
 						</g:if>

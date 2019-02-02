@@ -27,7 +27,7 @@ class ReceiptController
 
     def index()
     {
-        def balance = balanceService.getLastStatementEndingBalace()
+        def balance = balanceService.getLastStatementEndingBalace("thanrahan")
 
         def receiptList = Receipt.findAllByOwnerAndReconcileNoIsNull("thanrahan", [sort: ['date': 'asc', 'debit': 'desc']])
 
@@ -47,6 +47,8 @@ class ReceiptController
                 receipt.reconcileAmount = receipt.credit * -1
             }
         }
+
+        receiptList = receiptList.reverse()
 
         [receiptList: receiptList]
 
@@ -189,7 +191,7 @@ class ReceiptController
         receipt.delete flush:true
 
         flash.message = message(code: 'default.deleted.message', args: [message(code: 'receipt.label', default: 'Receipt'), receipt.id])
-        redirect action:"index"
+        redirect controller: "statement", action: "autoReconcile"
 
     }
 

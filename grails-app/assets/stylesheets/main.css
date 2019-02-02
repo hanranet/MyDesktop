@@ -155,7 +155,7 @@ img {
     text-decoration: underline;
 }
 
-.nav a.home, .nav a.list, .nav a.create {
+.nav a.home, .nav a.list, .nav a.create, .nav a.payday, .nav a.report {
     background-position: 0.7em center;
     background-repeat: no-repeat;
     text-indent: 25px;
@@ -171,6 +171,14 @@ img {
 
 .nav a.create {
     background-image: url(../images/skin/database_add.png);
+}
+
+.nav a.payday {
+    background-image: url(../images/skin/dollar_sign.png);
+}
+
+.nav a.report {
+    background-image: url(../images/skin/report.png);
 }
 
 .nav li.dropdown.open ul.dropdown-menu {
@@ -448,6 +456,10 @@ th.desc a {
 th:hover, tr:hover {
     /*background: #79b94c;*/
     background: #ffffff;
+}
+
+.currency {
+    text-align: right;
 }
 
 /* PAGINATION */

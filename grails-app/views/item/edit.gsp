@@ -61,6 +61,11 @@
                      <input type="text" name="memo" value="${item.memo}" id="memo" autocomplete="off"/>
                    </div>
 
+                   <div class='fieldcontain'>
+                       <label for='category'>Category</label>
+                       <g:select name="category" from="${['U', 'A', 'L']}" value="${item.category}" valueMessagePrefix="item.category" />
+                   </div>
+
                    <div class='fieldcontain required'>
                        <label for='billDate'>Bill Date</label>
                        <input type="text" name="billDate" size="10" value="${formatDate(date:item.billDate, format:'MM/dd/yyyy', timeZone:timeZone)}" id="datepicker" autocomplete="off"></p>

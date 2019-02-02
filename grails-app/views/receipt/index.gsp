@@ -24,9 +24,9 @@
                         <th>Date</th>
                         <th>Payee</th>
                         <th>Category</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
-                        <th>Balance</th>
+                        <th class="currency">Debit</th>
+                        <th class="currency">Credit</th>
+                        <th class="currency">Balance</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -45,18 +45,18 @@
                             <td>${receipt.payee}</td>
                             <td>${receipt.category}</a></td>
                             <g:if test="${receipt.debit > 0}">
-                                <td><g:formatNumber number="${receipt.debit}" type="currency" currencyCode="USD" /></td>
+                                <td class="currency"><g:formatNumber number="${receipt.debit}" type="currency" currencyCode="USD" /></td>
                             </g:if>
                             <g:else>
                                 <td>&nbsp;</td>
                             </g:else>
                             <g:if test="${receipt.credit > 0}">
-                                <td><g:formatNumber number="${receipt.credit}" type="currency" currencyCode="USD" /></td>
+                                <td class="currency"><g:formatNumber number="${receipt.credit}" type="currency" currencyCode="USD" /></td>
                             </g:if>
                             <g:else>
                                 <td>&nbsp;</td>
                             </g:else>
-                            <td><g:formatNumber number="${receipt.balance}" type="currency" currencyCode="USD" /></td>
+                            <td class="currency"><g:formatNumber number="${receipt.balance}" type="currency" currencyCode="USD" /></td>
                             <td><a href="/receipt/edit/${receipt.id}">edit</a>&nbsp;|&nbsp;<a href="/receipt/delete/${receipt.id}">delete
                         </tr>
                         <g:set var="counter" value="${counter + 1}" />

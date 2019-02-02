@@ -17,40 +17,92 @@
       } );
     </script>
     <g:layoutHead/>
-</head>
-<body>
+    <style>
+        body {
+          font-family: "Comic Sans", sans-serif;
+        }
 
-    <div class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/#">
-                    <i class="fa grails-icon">
-                        <asset:image src="grails-cupsonly-logo-white.svg"/>
-                    </i> MyDesktop
-                </a>
-            </div>
-            <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><g:link controller="Receipt" action="index">Receipts</g:link></li>
-                    <li><g:link controller="Item" action="index">Budget</g:link></li>
-                    <li><g:link controller="Statement" action="autoReconcile">AutoReconcile</g:link></li>
-                    <li><g:link controller="Statement" action="index">Statements</g:link></li>
-                    <!--<li><g:link controller="Debt" action="list">Debt Repay</g:link></li>-->
-                    <!--<li><g:link controller="DripAccount" action="list">DRIP's</g:link></li>-->
-                    <!--<li><g:link controller="DripAccount" action="list">Spending Report</g:link></li> -->
-                    <!--<li><g:link controller="DripAccount" action="list">Pay Dates</g:link></li> -->
-                </ul>
+        .sidenav {
+          width: 130px;
+          position: fixed;
+          z-index: 1;
+          top: 75px;
+          left: 10px;
+          background: #eee;
+          overflow-x: hidden;
+          padding: 8px 0;
+        }
+
+        .sidenav a {
+          padding: 6px 8px 6px 16px;
+          text-decoration: none;
+          font-size: 15px;
+          color: #2196F3;
+          display: block;
+        }
+
+        .sidenav a:hover {
+          color: #064579;
+        }
+
+        .main {
+          margin-left: 140px; /* Same width as the sidebar + left position in px */
+          margin-top: 80px;
+          font-size: 15px; /* Increased text to enable scrolling */
+          padding: 0px 10px;
+        }
+
+       	.greet {
+        	  font-family: "Open Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        	  color: white;
+        	  padding: 10px 10px;
+        }
+
+        .greet a {
+          	color: white
+        }
+
+        @media screen and (max-height: 450px) {
+          .sidenav {padding-top: 15px;}
+          .sidenav a {font-size: 18px;}
+        }
+        </style>
+        </head>
+        <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/#">
+                        <i class="fa grails-icon">
+                            <asset:image src="grails-cupsonly-logo-white.svg"/>
+                        </i> MyDesktop
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
+                    <ul class="nav navbar-nav navbar-right">
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
-    <g:layoutBody/>
+       <div class="sidenav">
+         <g:link controller="receipt">Receipts</g:link>
+         <g:link controller="item">Budget</g:link>
+         <g:link controller="statement" action="autoReconcile">Auto-Reconcile</g:link>
+         <g:link controller="statement">Statements</g:link>
+       </div>
+
+       <div class="main">
+         <g:layoutBody/>
+       </div>
+    </div>
 
     <div class="footer" role="contentinfo"></div>
 

@@ -10,13 +10,15 @@ import static org.springframework.http.HttpStatus.OK
 
 class ItemController {
 
+    def balanceService
+
     def index() {
 
         def weeklyTotal = 0
         def monthlyTotal = 0
         def bucketTotal = 0
 
-        def itemList = Item.findAllByOwner("thanrahan")
+        def itemList = Item.findAllByOwner("thanrahan", [sort: ['category': 'asc', 'name':'asc']])
 
         itemList.each { item->
 
@@ -38,8 +40,8 @@ class ItemController {
 
         }
 
-        //def receiptBalance = receiptsService.getReceiptBalance()
-        def receiptBalance = 0
+        def receiptBalance = balanceService.getReceiptBalance("thanrahan")
+        //def receiptBalance = 0
 
         def difference = receiptBalance - bucketTotal
 

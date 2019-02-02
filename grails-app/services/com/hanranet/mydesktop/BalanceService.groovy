@@ -7,35 +7,34 @@ import grails.transaction.Transactional
 @Transactional
 class BalanceService {
 
-    def getBalance() {
-        // pull from ending balance on last statement
-        BigDecimal startingBalance = new BigDecimal(0)
+    def getReceiptBalance(String owner) {
+
         BigDecimal debits = new BigDecimal(0)
-        def rs = Receipt.executeQuery("select sum(debit) from Receipt")
-        if (!rs.empty()) {
-            debits = new BigDecimal(rs)
+
+        def rs = Receipt.executeQuery("select sum(debit) from Receipt where owner = '" + owner + "' and reconcile_no is null")
+
+        if (!rs.isEmpty()) {
+            debits = new BigDecimal(rs[0])
         }
 
         BigDecimal credits = new BigDecimal(0)
-//        def rs2 = Receipt.executeQuery("select sum(credit) as credits from Receipt")
-//        if (rs2.credits) {
-//            credits = new BigDecimal(rs.credits)
-//        }
-        println "Debits= $debits"
-        println "Credits= $credits"
+        def rs2 = Receipt.executeQuery("select sum(credit) from Receipt where owner = '" + owner + "' and reconcile_no is null")
+        if (!rs2.isEmpty()) {
+            credits = new BigDecimal(rs2[0])
+        }
 
-        BigDecimal balance = new BigDecimal(0)
+        BigDecimal balance = getLastStatementEndingBalace(owner)
         balance = balance.add(debits)
         balance = balance.subtract(credits)
 
         balance
     }
 
-    def BigDecimal getLastStatementEndingBalace() {
+    def BigDecimal getLastStatementEndingBalace(String owner) {
 
         def balance = new BigDecimal(0.0)
 
-        def lastStatement = Statement.find("FROM Statement ORDER BY dateCreated")
+        def lastStatement = Statement.find("FROM Statement where owner = '" + owner + "' ORDER BY dateCreated")
 
         if (lastStatement) {
             balance = lastStatement.endingBalance
