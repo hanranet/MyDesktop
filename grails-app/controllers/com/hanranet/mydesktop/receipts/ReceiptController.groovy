@@ -1,11 +1,13 @@
 package com.hanranet.mydesktop.receipts
 
 import com.hanranet.mydesktop.budget.Item
+import grails.plugin.springsecurity.annotation.Secured
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
+@Secured("hasRole('ROLE_ADMIN')")
 class ReceiptController
 {
 
@@ -13,23 +15,15 @@ class ReceiptController
 
     def balanceService
 
-    def beforeInterceptor = [action:this.&auth]
-
-    def auth()
-    {
-        println "This is a test of auth"
-//        if (!session.user)
-//        {
-//            redirect(controller:"user", action:"login")
-//            return false
-//        }
-    }
+    def springSecurityService
 
     def index()
     {
-        def balance = balanceService.getLastStatementEndingBalace("thanrahan")
+        def user = springSecurityService.currentUser
 
-        def receiptList = Receipt.findAllByOwnerAndReconcileNoIsNull("thanrahan", [sort: ['date': 'asc', 'debit': 'desc']])
+        def balance = balanceService.getLastStatementEndingBalace(user.username)
+
+        def receiptList = Receipt.findAllByOwnerAndReconcileNoIsNull(user.username, [sort: ['date': 'asc', 'debit': 'desc']])
 
         receiptList.each { receipt->
 
@@ -184,6 +178,22 @@ class ReceiptController
 
     @Transactional
     def delete(Receipt receipt) {
+
+        if (receipt == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        receipt.delete flush:true
+
+        flash.message = message(code: 'default.deleted.message', args: [message(code: 'receipt.label', default: 'Receipt'), receipt.id])
+        redirect controller: "receipt", action: "index"
+
+    }
+
+    @Transactional
+    def autoReconcileDelete(Receipt receipt) {
 
         if (receipt == null) {
             transactionStatus.setRollbackOnly()

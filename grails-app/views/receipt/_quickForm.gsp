@@ -6,7 +6,7 @@
 	<tr>
 		<td>
 			<div class='fieldcontain'>
-                <input type="text" name="checkNo" size="5" value="Check No" style="color:#aaa" onfocus="this.value='';this.style.color='#000';this.onfocus='';"/>
+                <input type="text" name="checkNo" size="5" value="Check No" style="color:#aaa" onfocus="this.value='0';this.style.color='#000';this.onfocus='';"/>
              </div>
 		</td>
 		

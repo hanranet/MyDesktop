@@ -87,17 +87,26 @@
                 </div>
                 <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
                     <ul class="nav navbar-nav navbar-right">
+                        <sec:ifLoggedIn>
+                            <li><g:link controller='logout'>Welcome, ${sec.username()}! [logout]</g:link></li>
+                        </sec:ifLoggedIn>
+                        <sec:ifNotLoggedIn>
+                            <li><g:link controller='login'>[login]</g:link></li>
+                        </sec:ifNotLoggedIn>
                     </ul>
                 </div>
             </div>
         </div>
 
-       <div class="sidenav">
-         <g:link controller="receipt">Receipts</g:link>
-         <g:link controller="item">Budget</g:link>
-         <g:link controller="statement" action="autoReconcile">Auto-Reconcile</g:link>
-         <g:link controller="statement">Statements</g:link>
-       </div>
+        <sec:ifLoggedIn>
+           <div class="sidenav">
+               <g:link controller="receipt">Receipts</g:link>
+               <g:link controller="item">Budget</g:link>
+               <g:link controller="statement" action="autoReconcile">Auto-Reconcile</g:link>
+               <g:link controller="statement">Statements</g:link>
+               <g:link controller="user">User</g:link>
+           </div>
+       </sec:ifLoggedIn>
 
        <div class="main">
          <g:layoutBody/>

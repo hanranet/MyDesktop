@@ -195,7 +195,7 @@
 									<td>${c.payee}</td>
 									<td><g:formatNumber number="${c.debit}" type="currency" currencyCode="USD" /></td>
 									<td><g:formatNumber number="${c.credit}" type="currency" currencyCode="USD" /></td>
-									<td><g:link onClick="if(!confirm('Are you sure you want to delete this receipt?')) { return false; }" controller="Receipt" action="delete" id="${c.id}">Delete</g:link></td>
+									<td><g:link onClick="if(!confirm('Are you sure you want to delete this receipt?')) { return false; }" controller="Receipt" action="autoReconcileDelete" id="${c.id}">Delete</g:link></td>
 								</tr>
 							</g:each>
 						</g:if>

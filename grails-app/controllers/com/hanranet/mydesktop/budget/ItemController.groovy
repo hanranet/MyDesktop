@@ -1,6 +1,7 @@
 package com.hanranet.mydesktop.budget
 
 import com.hanranet.mydesktop.receipts.Receipt
+import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import org.codehaus.groovy.transform.trait.Traits
 import org.springframework.dao.DataIntegrityViolationException
@@ -12,6 +13,7 @@ class ItemController {
 
     def balanceService
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def index() {
 
         def weeklyTotal = 0
@@ -54,6 +56,7 @@ class ItemController {
 
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def create() {
         [itemInstance: new Item(params)]
     }
@@ -62,6 +65,7 @@ class ItemController {
         redirect action:"index"
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def save(Item item) {
 
@@ -91,6 +95,7 @@ class ItemController {
         redirect item
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def edit() {
         def itemInstance = Item.get(params.id)
         if (!itemInstance) {
@@ -102,6 +107,7 @@ class ItemController {
         [item: itemInstance]
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def update(Item item) {
         if (item == null) {
@@ -127,6 +133,7 @@ class ItemController {
         }
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def delete(Item item) {
 
@@ -207,6 +214,7 @@ class ItemController {
 //        }
 //    }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def payNow() {
 
@@ -246,6 +254,7 @@ class ItemController {
 
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def payDay() {
 
         def itemList = Item.findAllByOwner("thanrahan")

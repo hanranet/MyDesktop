@@ -2,6 +2,7 @@ package com.hanranet.mydesktop.statements
 
 import com.hanranet.mydesktop.budget.Item
 import com.hanranet.mydesktop.receipts.Receipt
+import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.web.context.request.RequestContextHolder
 
 import static org.springframework.http.HttpStatus.*
@@ -12,11 +13,13 @@ class StatementController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Statement.list(params), model:[statementInstanceTotal: Statement.count()]
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def show(Statement statement) {
 
         def statementInstance = Statement.get(params.id)
@@ -46,6 +49,7 @@ class StatementController {
         [statementInstance: statementInstance, debitReceipts: debitReceipts, creditReceipts: creditReceipts]
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def create() {
 
         def statement = new Statement()
@@ -79,6 +83,7 @@ class StatementController {
         [statementInstance: statement, debitReceipts: debitReceipts, creditReceipts: creditReceipts]
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def save(Statement statement) {
 
@@ -143,11 +148,13 @@ class StatementController {
 
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def edit(Statement statement) {
 
         respond statement
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def update(Statement statement) {
         if (statement == null) {
@@ -173,6 +180,7 @@ class StatementController {
         }
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     @Transactional
     def delete(Statement statement) {
 
@@ -194,6 +202,7 @@ class StatementController {
     }
 
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def autoReconcile() {
 
         def cleanCsvReceiptList = new ArrayList()
