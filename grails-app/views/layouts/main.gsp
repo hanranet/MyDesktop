@@ -104,7 +104,8 @@
                <g:link controller="item">Budget</g:link>
                <g:link controller="statement" action="autoReconcile">Auto-Reconcile</g:link>
                <g:link controller="statement">Statements</g:link>
-               <g:link controller="user">User</g:link>
+               <g:link controller="event">Vacation</g:link>
+               <g:link controller="user">Admin</g:link>
            </div>
        </sec:ifLoggedIn>
 

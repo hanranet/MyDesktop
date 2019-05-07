@@ -58,7 +58,10 @@
                                 <td>&nbsp;</td>
                             </g:else>
                             <td class="currency"><g:formatNumber number="${receipt.balance}" type="currency" currencyCode="USD" /></td>
-                            <td><a href="/receipt/edit/${receipt.id}">edit</a>&nbsp;|&nbsp;<a href="/receipt/delete/${receipt.id}">delete
+                            <td>
+                                <a href="/receipt/edit/${receipt.id}">edit</a>&nbsp;|&nbsp;
+                                <g:link onClick="if(!confirm('Are you sure you want to delete this receipt?')) { return false; }" action="delete" id="${receipt.id}">delete</g:link>
+                            </td>
                         </tr>
                         <g:set var="counter" value="${counter + 1}" />
                     </g:each>

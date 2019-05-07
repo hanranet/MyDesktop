@@ -5,6 +5,8 @@ import com.hanranet.mydesktop.receipts.Receipt
 import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.web.context.request.RequestContextHolder
 
+import java.util.concurrent.ExecutionException
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -16,6 +18,8 @@ class StatementController {
     @Secured("hasRole('ROLE_ADMIN')")
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+        params.sort = 'dateCreated'
+        params.order = 'desc'
         respond Statement.list(params), model:[statementInstanceTotal: Statement.count()]
     }
 
@@ -54,7 +58,7 @@ class StatementController {
 
         def statement = new Statement()
 
-        def lastStatement = Statement.find("FROM Statement ORDER BY dateCreated")
+        def lastStatement = Statement.find("FROM Statement ORDER BY dateCreated desc")
 
         if (lastStatement) {
             statement.beginDate = lastStatement.endingDate + 1
@@ -71,16 +75,18 @@ class StatementController {
 
             if (receipt.debit > 0)
             {
+                receipt.reconcileAmount = receipt.debit
                 debitReceipts.add(receipt)
             }
 
             if (receipt.credit > 0)
             {
+                receipt.reconcileAmount = receipt.credit * -1
                 creditReceipts.add(receipt)
             }
         }
 
-        [statementInstance: statement, debitReceipts: debitReceipts, creditReceipts: creditReceipts]
+        [statementInstance: statement, debitReceipts: debitReceipts.sort { it.date }, creditReceipts: creditReceipts.sort { it.date }]
     }
 
     @Secured("hasRole('ROLE_ADMIN')")
@@ -106,7 +112,7 @@ class StatementController {
 
         println params
 
-        def creditList = params.creditReceipts
+        def creditList = toList(params.creditReceipts)
 
         creditList.each{receiptId->
 
@@ -122,7 +128,7 @@ class StatementController {
 
         }
 
-        def debitList = params.debitReceipts
+        def debitList = toList(params.debitReceipts)
 
         debitList.each{receiptId->
 
@@ -146,6 +152,14 @@ class StatementController {
             '*' { respond statement, [status: CREATED] }
         }
 
+    }
+
+    private toList(String value) {
+        return [value]
+    }
+
+    private def toList(value) {
+        value ?: []
     }
 
     @Secured("hasRole('ROLE_ADMIN')")
@@ -279,8 +293,14 @@ class StatementController {
             {
                 def mydReceipt = mydIter.next()
 
-                if ( csvReceipt.debit == mydReceipt.debit && csvReceipt.credit == mydReceipt.credit )
-                {
+                if (mydReceipt.id == 535) {
+                    println("I am here")
+                }
+
+                int res1 = csvReceipt.debit.compareTo(mydReceipt.debit)
+                int res2 = csvReceipt.credit.compareTo(mydReceipt.credit)
+
+                if( res1 == 0 && res2 == 0) {
                     mydIter.remove()
                     break
                 }

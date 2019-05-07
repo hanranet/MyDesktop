@@ -61,6 +61,7 @@ class ItemController {
         [itemInstance: new Item(params)]
     }
 
+    @Secured("hasRole('ROLE_ADMIN')")
     def show(Item item) {
         redirect action:"index"
     }
